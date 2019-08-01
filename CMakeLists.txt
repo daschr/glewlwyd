@@ -283,6 +283,20 @@ if (WITH_USER_HTTP)
 	set(USER_MODULES ${USER_MODULES} usermodhttp)
 endif ()
 
+option(WITH_CUSDB "Build custom PG backend user module" on)
+if (WITH_CUSDB)
+	set(LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/glewlwyd-common.h ${CMAKE_CURRENT_SOURCE_DIR}/src/misc.c ${USER_MODULES_SRC_PATH}/cusdb.c)
+
+	set(MOD_LIBS "-ldl -lpq")
+
+	add_library(usermodcusdb MODULE ${LIB_SRC})
+	set_target_properties(usermodcusdb PROPERTIES
+			COMPILE_OPTIONS -Wextra)
+	target_link_libraries(usermodcusdb ${MOD_LIBS})
+	set(USER_MODULES ${USER_MODULES} usermodcusdb)
+endif ()
+
+
 # clients modules
 
 if (WITH_MOCK OR BUILD_GLEWLWYD_TESTING)

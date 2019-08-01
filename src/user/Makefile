@@ -25,7 +25,7 @@ CC=gcc
 CFLAGS=-c -fPIC -Wall -Wno-unknown-pragmas -D_REENTRANT -shared -nostartfiles -Wno-pragmas $(ADDITIONALFLAGS)
 LIBS=-ljansson -lorcania -lyder -ldl
 LDFLAGS += -Wl,-R '-Wl,-R$$ORIGIN'
-TARGET=libmoddatabase.so libmodldap.so libmodhttp.so
+TARGET=libmoddatabase.so libmodldap.so libmodhttp.so libmodcusdb.so
 all: release
 
 misc.o: ../misc.c ../glewlwyd-common.h
@@ -45,6 +45,10 @@ libmodldap.so: ../glewlwyd-common.h ldap.o misc.o
 
 libmodhttp.so: ../glewlwyd-common.h http.o misc.o
 	$(CC) -shared -Wl,-soname,libmodhttp.so -o libmodhttp.so http.o misc.o $(LIBS)
+
+libmodcusdb.so: ../glewlwyd-common.h  misc.o
+	$(CC) -lpq -shared -Wl,-soname,libmodcusdb.so -o libmodcusdb.so misc.o $(LIBS)
+
 
 clean:
 	rm -f *.o *.so
